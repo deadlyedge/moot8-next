@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  userName   String
+  imageUrl   String?  @db.Text
+  email      String   @db.Text
+  
+  reputation Int      @default(0)
+  role       UserRole @default(USER)
+
+  entries   Entry[]
+  comments  Comment[]
+  votes     Vote[]
+  following Following[]   @relation("UserFollowers")
+  followers Following[]   @relation("UserFollows")
+  edits     EditHistory[] @relation("EditedBy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Entry {
+  id            String  @id @default(uuid())
+  title         String
+  definition    String
+  multimediaUrl String? // URL or path to multimedia content
+  createdBy     Profile @relation(fields: [createdById], references: [id])
+  createdById   String
+
+  comments       Comment[]
+  votes          Vote[]
+  edits          EditHistory[]
+  relatedEntries Entry[]       @relation("RelatedEntries")
+  relatedTo      Entry[]       @relation("RelatedEntries")
+
+  upvoteCount   Int @default(0)
+  downvoteCount Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id          String  @id @default(uuid())
+  content     String
+  createdBy   Profile @relation(fields: [createdById], references: [id])
+  createdById String
+  entry       Entry   @relation(fields: [entryId], references: [id])
+  entryId     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Vote {
+  id      String  @id @default(uuid())
+  value   Int // 1 for upvote, -1 for downvote
+  user    Profile @relation(fields: [userId], references: [id])
+  userId  String
+  entry   Entry   @relation(fields: [entryId], references: [id])
+  entryId String
+
+  createdAt DateTime @default(now())
+}
+
+model EditHistory {
+  id         String   @id @default(uuid())
+  content    String
+  editedBy   Profile  @relation("EditedBy", fields: [editedById], references: [id])
+  editedById String
+  entry      Entry    @relation(fields: [entryId], references: [id])
+  entryId    String
+  createdAt  DateTime @default(now())
+}
+
+model Following {
+  id          String  @id @default(uuid())
+  follower    Profile @relation("UserFollows", fields: [followerId], references: [id])
+  followerId  String
+  following   Profile @relation("UserFollowers", fields: [followingId], references: [id])
+  followingId String
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}

@@ -7,8 +7,10 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip"
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
+import { initialProfile } from "@/lib/initialProfile"
 
-export default function UserBar() {
+export default async function UserBar() {
+  const profile = await initialProfile()
   return (
     <div className='flex items-center justify-center'>
       <Tooltip>
