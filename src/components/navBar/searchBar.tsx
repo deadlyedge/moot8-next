@@ -7,6 +7,7 @@ import { Label } from "../ui/label"
 import { Checkbox } from "../ui/checkbox"
 import Link from "next/link"
 import { Separator } from "../ui/separator"
+import ThemeSwitch from "./themeSwitch"
 
 export default function SearchBar() {
   return (
@@ -26,11 +27,15 @@ export default function SearchBar() {
             {/* <p>Filters</p> */}
           </div>
         </PopoverTrigger>
-        <PopoverContent className='flex flex-col items-center justify-start gap-2 w-52'>
+        <PopoverContent className='flex flex-col items-center justify-start gap-2 w-64'>
           <div className='flex items-center gap-2'>
             <Switch id='nsfw-content' />
             <Label htmlFor='nsfw-content'>NSFW Content</Label>
           </div>
+          <div>
+            <ThemeSwitch />
+          </div>
+          <Separator />
           <div className='flex items-center gap-2'>
             <ul>
               <li className='my-2'>

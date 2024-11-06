@@ -1,13 +1,20 @@
 import type { Metadata } from "next"
-import { Noto_Serif } from "next/font/google"
+import { Noto_Serif, Open_Sans } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 import { ClerkProvider } from "@clerk/nextjs"
+import { ThemeProvider } from "@/components/providers/themeProvider"
 
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
   variable: "--font-noto-serif",
-  weight: ["100", "900"],
+  weight: ["300", "700"],
+})
+
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  variable: "--font-open-sans",
+  weight: ["300", "400", "500", "600", "700", "800"],
 })
 
 export const metadata: Metadata = {
@@ -21,14 +28,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
-      <ClerkProvider>
-        <body className='antialiased dark'>
+    <ClerkProvider>
+      <html lang='en'>
+        <body className={cn(notoSerif.className,'antialiased')}>
           {/* <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}> */}
-          {children}
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem={true}
+            storageKey='moot8-theme'>
+            {children}
+          </ThemeProvider>
         </body>
-      </ClerkProvider>
-    </html>
+      </html>
+    </ClerkProvider>
   )
 }
