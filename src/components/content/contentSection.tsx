@@ -1,4 +1,4 @@
-import WordCard from "./card"
+import WordCard from "./wordCard"
 
 export default function ContentSection() {
   return (
