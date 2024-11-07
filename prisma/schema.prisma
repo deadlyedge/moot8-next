@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Profile {
-  id         String   @id @default(uuid())
-  userId     String   @unique
-  userName   String
-  imageUrl   String?  @db.Text
-  email      String   @db.Text
-  
+  id       String  @id @default(uuid())
+  userId   String  @unique
+  userName String
+  imageUrl String? @db.Text
+  email    String  @db.Text
+
   reputation Int      @default(0)
   role       UserRole @default(USER)
 
@@ -63,7 +63,7 @@ model Comment {
 
 model Vote {
   id      String  @id @default(uuid())
-  value   Int // 1 for upvote, -1 for downvote
+  value   Int     @default(0) // 1 for upvote, -1 for downvote
   user    Profile @relation(fields: [userId], references: [id])
   userId  String
   entry   Entry   @relation(fields: [entryId], references: [id])

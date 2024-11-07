@@ -1,11 +1,12 @@
-import { currentUser } from "@clerk/nextjs/server";
-import { RedirectToSignIn } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs/server"
+// import { RedirectToSignIn } from "@clerk/nextjs"
 
-import { db } from "@/lib/db";
+import { db } from "@/lib/db"
+import { redirect } from "next/navigation"
 
 export const initialProfile = async () => {
   const user = await currentUser()
-  if (!user) return RedirectToSignIn
+  if (!user) return redirect('/') 
 
   const profile = await db.profile.findUnique({
     where: {
@@ -23,6 +24,8 @@ export const initialProfile = async () => {
       imageUrl: user.imageUrl,
     },
   })
+
+  console.log("profile initialed.")
 
   return newProfile
 }

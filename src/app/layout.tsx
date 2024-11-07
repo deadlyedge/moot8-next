@@ -23,7 +23,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      dynamic
+      signInUrl='/sign-in'
+      signUpUrl='/sign-up'
+      signInFallbackRedirectUrl='/'
+      signUpFallbackRedirectUrl='/'
+      afterSignOutUrl='/' >
       <html lang='en' suppressHydrationWarning>
         <body className={cn(notoSerif.className, "antialiased")}>
           <ThemeProvider
